@@ -56,8 +56,8 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
 
     // New property for setting ImageView component
     @SimpleProperty(description = "The ImageView component to update with the processed image.")
-    public void ImageView(AndroidViewComponent view) {
-        this.imageView = view;
+    public void ImageView(AndroidViewComponent image) {
+        this.imageView = image;
     }
 
     @SimpleFunction
@@ -129,10 +129,8 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
 
     // Update ImageView directly with the new processed Bitmap
     private void updateImageView(Bitmap bitmap) {
-        if (imageView instanceof ImageView) {
-            ImageView imgView = (ImageView) imageView.getView();
-            imgView.setImageBitmap(bitmap);
-        }
+            ImageView i = (ImageView) imageView.getView();
+            i.setImageBitmap(bitmap);
     }
 }
 
