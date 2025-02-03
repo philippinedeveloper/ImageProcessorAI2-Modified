@@ -35,7 +35,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     public static final float DEFAULT_WEIGHT = 0.5f;
     private ComponentContainer container;
     private float weight = DEFAULT_WEIGHT;
-    private AndroidViewComponent imageView;
+    private ImageView i;
 
     public ImageProcessorModified(ComponentContainer container) {
         super(container.$form());
@@ -54,10 +54,9 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
         this.weight = Math.max(0, Math.min(1, newWeight));
     }
 
-    // New property for setting ImageView component
-    @SimpleProperty(description = "The ImageView component to update with the processed image.")
-    public void ImageView(AndroidViewComponent image) {
-        this.imageView = image;
+    @SimpleProperty(description = "The Image component to update with the processed image.")
+    public void Image(AndroidViewComponent image) {
+        i = (ImageView) image.getView();
     }
 
     @SimpleFunction
@@ -127,9 +126,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
         }
     }
 
-    // Update ImageView directly with the new processed Bitmap
     private void updateImageView(Bitmap bitmap) {
-            ImageView i = (ImageView) imageView.getView();
             i.setImageBitmap(bitmap);
     }
 }
