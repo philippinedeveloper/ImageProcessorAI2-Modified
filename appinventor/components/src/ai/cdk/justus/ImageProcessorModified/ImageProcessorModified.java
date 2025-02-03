@@ -65,8 +65,8 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
             Bitmap bitmapB = MediaUtil.getBitmapDrawable(container.$form(), imageB).getBitmap();
             
-            int maxW = Math.max(bitmapA.getWidth(), bitmapB.getWidth());
-            int maxH = Math.max(bitmapA.getHeight(), bitmapB.getHeight());
+            int maxW = Math.min(bitmapA.getWidth(), bitmapB.getWidth());
+            int maxH = Math.min(bitmapA.getHeight(), bitmapB.getHeight());
             Bitmap bitmapC = Bitmap.createBitmap(maxW, maxH, Bitmap.Config.ARGB_8888);
 
             for (int x = 0; x < maxW; x++) {
@@ -87,7 +87,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     }
 
     @SimpleFunction
-    public String ImageGrey(String imageA) {
+    public void ImageGrey(String imageA) {
         try {
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
             Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
@@ -99,42 +99,103 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
                     bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), avgC, avgC, avgC));
                 }
             }
-            return saveAndDispatch(bitmapC);
+            saveAndDispatch(bitmapC);
         } catch (IOException e) {
             Log.e("Image", "Unable to load image");
-            return "";
         }
     }
 
     @SimpleFunction
-    public String ImageBlur(String imageA) {
+    public void ImageInvert(String imageA) {
         try {
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
-            Bitmap bitmapC = Bitmap.createBitmap(bitmapA);
+            Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
             
-            for (int x = 1; x < bitmapA.getWidth() - 1; x++) {
-                for (int y = 1; y < bitmapA.getHeight() - 1; y++) {
+            for (int x = 0; x < bitmapA.getWidth(); x++) {
+                for (int y = 0; y < bitmapA.getHeight(); y++) {
                     int colA = bitmapA.getPixel(x, y);
-                    int colB = bitmapA.getPixel(x - 1, y);
-                    int colC = bitmapA.getPixel(x + 1, y);
-                    int colD = bitmapA.getPixel(x, y - 1);
-                    int colE = bitmapA.getPixel(x, y + 1);
-                    
-                    int avgR = (Color.red(colA) + Color.red(colB) + Color.red(colC) + Color.red(colD) + Color.red(colE)) / 5;
-                    int avgG = (Color.green(colA) + Color.green(colB) + Color.green(colC) + Color.green(colD) + Color.green(colE)) / 5;
-                    int avgB = (Color.blue(colA) + Color.blue(colB) + Color.blue(colC) + Color.blue(colD) + Color.blue(colE)) / 5;
-                    
-                    bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), avgR, avgG, avgB));
+                    int rC = 255 - Color.red(colA);
+                    int gC = 255 - Color.green(colA);
+                    int bC = 255 - Color.blue(colA);
+                    bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), rC, gC, bC));
                 }
             }
-            return saveAndDispatch(bitmapC);
+            saveAndDispatch(bitmapC);
         } catch (IOException e) {
             Log.e("Image", "Unable to load image");
-            return "";
         }
     }
 
-    private String saveAndDispatch(Bitmap bitmap) {
+    // New function for Image Blur
+    @SimpleFunction
+    public void ImageBlur(String imageA) {
+        try {
+            Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
+            Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
+
+            // Simple blur kernel (5x5)
+            int blurRadius = 5;
+            int[] kernel = new int[blurRadius * blurRadius];
+            for (int i = 0; i < kernel.length; i++) {
+                kernel[i] = 1;
+            }
+
+            // Apply blur
+            for (int x = blurRadius / 2; x < bitmapA.getWidth() - blurRadius / 2; x++) {
+                for (int y = blurRadius / 2; y < bitmapA.getHeight() - blurRadius / 2; y++) {
+                    int r = 0, g = 0, b = 0, a = 0;
+                    for (int i = -blurRadius / 2; i < blurRadius / 2; i++) {
+                        for (int j = -blurRadius / 2; j < blurRadius / 2; j++) {
+                            int col = bitmapA.getPixel(x + i, y + j);
+                            a += Color.alpha(col);
+                            r += Color.red(col);
+                            g += Color.green(col);
+                            b += Color.blue(col);
+                        }
+                    }
+                    int newColor = Color.argb(a / kernel.length, r / kernel.length, g / kernel.length, b / kernel.length);
+                    bitmapC.setPixel(x, y, newColor);
+                }
+            }
+            saveAndDispatch(bitmapC);
+        } catch (IOException e) {
+            Log.e("Image", "Unable to load image");
+        }
+    }
+
+    // New function for Image Sepia
+    @SimpleFunction
+    public void ImageSepia(String imageA) {
+        try {
+            Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
+            Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
+
+            for (int x = 0; x < bitmapA.getWidth(); x++) {
+                for (int y = 0; y < bitmapA.getHeight(); y++) {
+                    int colA = bitmapA.getPixel(x, y);
+
+                    int r = Color.red(colA);
+                    int g = Color.green(colA);
+                    int b = Color.blue(colA);
+
+                    int tr = (int) (0.393 * r + 0.769 * g + 0.189 * b);
+                    int tg = (int) (0.349 * r + 0.686 * g + 0.168 * b);
+                    int tb = (int) (0.272 * r + 0.534 * g + 0.131 * b);
+
+                    r = Math.min(255, tr);
+                    g = Math.min(255, tg);
+                    b = Math.min(255, tb);
+
+                    bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), r, g, b));
+                }
+            }
+            saveAndDispatch(bitmapC);
+        } catch (IOException e) {
+            Log.e("Image", "Unable to load image");
+        }
+    }
+
+    private void saveAndDispatch(Bitmap bitmap) {
         File image = new File(Environment.getExternalStorageDirectory(), "/Cimage.png");
         try (FileOutputStream fostream = new FileOutputStream(image)) {
             bitmap.compress(CompressFormat.PNG, 100, fostream);
@@ -142,7 +203,6 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
             e.printStackTrace();
         }
         AfterProcess(image.getAbsolutePath());
-        return image.getAbsolutePath();
     }
 
     @SimpleEvent
@@ -150,4 +210,3 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
         EventDispatcher.dispatchEvent(this, "AfterProcess", image);
     }
 }
-
