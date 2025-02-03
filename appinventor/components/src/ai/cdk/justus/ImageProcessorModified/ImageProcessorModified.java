@@ -56,7 +56,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
 
     @SimpleProperty(description = "The Image component to update with the processed image.")
     public void Image(AndroidViewComponent image) {
-        i = (ImageView) image.getView();
+        this.i = (ImageView) image.getView();
     }
 
     @SimpleFunction
