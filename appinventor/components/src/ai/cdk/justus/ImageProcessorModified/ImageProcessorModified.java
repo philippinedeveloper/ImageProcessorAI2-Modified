@@ -86,44 +86,44 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     }
 
     @SimpleFunction
-    public void ImageGrey(@Asset String image) {
-        try {
-            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
-            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-            
-            for (int x = 0; x < bitmapA.getWidth(); x++) {
-                for (int y = 0; y < bitmapA.getHeight(); y++) {
-                    int col = bitmapA.getPixel(x, y);
-                    int avg = (Color.red(col) + Color.green(col) + Color.blue(col)) / 3;
-                    bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), avg, avg, avg));
-                }
+public void ImageGrey(@Asset String image) {
+    try {
+        Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+        Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        
+        for (int x = 0; x < bitmap.getWidth(); x++) {
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                int col = bitmap.getPixel(x, y);
+                int avg = (Color.red(col) + Color.green(col) + Color.blue(col)) / 3;
+                bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), avg, avg, avg));
             }
-            updateImageView(bitmapC);
-        } catch (IOException e) {
-            Log.e("Image", "Unable to load image");
         }
+        updateImageView(bitmap2);
+    } catch (IOException e) {
+        Log.e("Image", "Unable to load image");
     }
+}
 
     @SimpleFunction
-    public void ImageInvert(@Asset String image) {
-        try {
-            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
-            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-            
-            for (int x = 0; x < bitmapA.getWidth(); x++) {
-                for (int y = 0; y < bitmapA.getHeight(); y++) {
-                    int col = bitmapA.getPixel(x, y);
-                    int r = 255 - Color.red(colA);
-                    int g = 255 - Color.green(colA);
-                    int b = 255 - Color.blue(colA);
-                    bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), r, g, b));
-                }
+public void ImageInvert(@Asset String image) {
+    try {
+        Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+        Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        
+        for (int x = 0; x < bitmap.getWidth(); x++) {
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                int col = bitmap.getPixel(x, y);
+                int r = 255 - Color.red(col);
+                int g = 255 - Color.green(col);
+                int b = 255 - Color.blue(col);
+                bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), r, g, b));
             }
-            updateImageView(bitmap2);
-        } catch (IOException e) {
-            Log.e("Image", "Unable to load image");
         }
+        updateImageView(bitmap2);
+    } catch (IOException e) {
+        Log.e("Image", "Unable to load image");
     }
+}
 
     private void updateImageView(Bitmap bitmap) {
             i.setImageBitmap(bitmap);
