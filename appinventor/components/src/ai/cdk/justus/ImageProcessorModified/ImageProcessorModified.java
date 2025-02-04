@@ -15,15 +15,14 @@ import android.graphics.Color;
 import android.util.Log;
 
 import com.google.appinventor.components.annotations.*;
-import com.google.appinventor.components.common.ComponentCategory;
-import com.google.appinventor.components.common.PropertyTypeConstants;
-import com.google.appinventor.components.runtime.util.MediaUtil;
+import com.google.appinventor.components.common.*;
+import com.google.appinventor.components.runtime.util.*;
 import com.google.appinventor.components.runtime.*;
 
 import android.widget.ImageView;
 
 @DesignerComponent(versionName = ImageProcessorModified.VERSION_NAME,
-    version = 2,
+    version = 3,
     description = "A component for complex image processing in MIT App Inventor.",
     category = ComponentCategory.EXTENSION,
     nonVisible = true,
@@ -31,7 +30,7 @@ import android.widget.ImageView;
 @SimpleObject(external = true)
 public class ImageProcessorModified extends AndroidNonvisibleComponent implements Component {
 
-    public static final String VERSION_NAME = "1.1";
+    public static final String VERSION_NAME = "1.2";
     public static final float DEFAULT_WEIGHT = 0.5f;
     private ComponentContainer container;
     private float weight = DEFAULT_WEIGHT;
@@ -60,7 +59,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     }
 
     @SimpleFunction
-    public void ImageCombine(String imageA, String imageB) {
+    public void ImageCombine(@Asset String imageA, @Asset String imageB) {
         try {
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
             Bitmap bitmapB = MediaUtil.getBitmapDrawable(container.$form(), imageB).getBitmap();
@@ -87,7 +86,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     }
 
     @SimpleFunction
-    public void ImageGrey(String imageA) {
+    public void ImageGrey(@Asset String image) {
         try {
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
             Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
@@ -106,7 +105,7 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     }
 
     @SimpleFunction
-    public void ImageInvert(String imageA) {
+    public void ImageInvert(@Asset String image) {
         try {
             Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
             Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
