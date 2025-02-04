@@ -88,14 +88,14 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     @SimpleFunction
     public void ImageGrey(@Asset String image) {
         try {
-            Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
-            Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             
             for (int x = 0; x < bitmapA.getWidth(); x++) {
                 for (int y = 0; y < bitmapA.getHeight(); y++) {
-                    int colA = bitmapA.getPixel(x, y);
-                    int avgC = (Color.red(colA) + Color.green(colA) + Color.blue(colA)) / 3;
-                    bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), avgC, avgC, avgC));
+                    int col = bitmapA.getPixel(x, y);
+                    int avg = (Color.red(col) + Color.green(col) + Color.blue(col)) / 3;
+                    bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), avg, avg, avg));
                 }
             }
             updateImageView(bitmapC);
@@ -107,19 +107,19 @@ public class ImageProcessorModified extends AndroidNonvisibleComponent implement
     @SimpleFunction
     public void ImageInvert(@Asset String image) {
         try {
-            Bitmap bitmapA = MediaUtil.getBitmapDrawable(container.$form(), imageA).getBitmap();
-            Bitmap bitmapC = Bitmap.createBitmap(bitmapA.getWidth(), bitmapA.getHeight(), Bitmap.Config.ARGB_8888);
+            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             
             for (int x = 0; x < bitmapA.getWidth(); x++) {
                 for (int y = 0; y < bitmapA.getHeight(); y++) {
-                    int colA = bitmapA.getPixel(x, y);
-                    int rC = 255 - Color.red(colA);
-                    int gC = 255 - Color.green(colA);
-                    int bC = 255 - Color.blue(colA);
-                    bitmapC.setPixel(x, y, Color.argb(Color.alpha(colA), rC, gC, bC));
+                    int col = bitmapA.getPixel(x, y);
+                    int r = 255 - Color.red(colA);
+                    int g = 255 - Color.green(colA);
+                    int b = 255 - Color.blue(colA);
+                    bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), r, g, b));
                 }
             }
-            updateImageView(bitmapC);
+            updateImageView(bitmap2);
         } catch (IOException e) {
             Log.e("Image", "Unable to load image");
         }
