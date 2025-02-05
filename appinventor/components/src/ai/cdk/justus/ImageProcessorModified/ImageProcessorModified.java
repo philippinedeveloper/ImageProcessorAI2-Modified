@@ -131,7 +131,7 @@ public void ImageInvert(@Asset String image) {
             Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
             Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
             
-            int radius = 2; // Blur radius
+            int radius = Math.max(bitmap.getWidth(), bitmap.getHeight()) / 2;
             for (int x = 0; x < bitmap.getWidth(); x++) {
                 for (int y = 0; y < bitmap.getHeight(); y++) {
                     int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0, count = 0;
