@@ -125,6 +125,70 @@ public void ImageInvert(@Asset String image) {
     }
 }
 
+        @SimpleFunction
+    public void ImageBlur(@Asset String image) {
+        try {
+            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            
+            int radius = 2; // Blur radius
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                for (int y = 0; y < bitmap.getHeight(); y++) {
+                    int rTotal = 0, gTotal = 0, bTotal = 0, aTotal = 0, count = 0;
+                    
+                    for (int dx = -radius; dx <= radius; dx++) {
+                        for (int dy = -radius; dy <= radius; dy++) {
+                            int nx = x + dx;
+                            int ny = y + dy;
+                            if (nx >= 0 && nx < bitmap.getWidth() && ny >= 0 && ny < bitmap.getHeight()) {
+                                int col = bitmap.getPixel(nx, ny);
+                                aTotal += Color.alpha(col);
+                                rTotal += Color.red(col);
+                                gTotal += Color.green(col);
+                                bTotal += Color.blue(col);
+                                count++;
+                            }
+                        }
+                    }
+                    bitmap2.setPixel(x, y, Color.argb(aTotal / count, rTotal / count, gTotal / count, bTotal / count));
+                }
+            }
+            updateImageView(bitmap2);
+        } catch (IOException e) {
+            Log.e("Image", "Unable to load image");
+        }
+    }
+
+    @SimpleFunction
+    public void ImageSepia(@Asset String image) {
+        try {
+            Bitmap bitmap = MediaUtil.getBitmapDrawable(container.$form(), image).getBitmap();
+            Bitmap bitmap2 = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
+            
+            for (int x = 0; x < bitmap.getWidth(); x++) {
+                for (int y = 0; y < bitmap.getHeight(); y++) {
+                    int col = bitmap.getPixel(x, y);
+                    int r = Color.red(col);
+                    int g = Color.green(col);
+                    int b = Color.blue(col);
+                    
+                    int tr = (int)(0.393 * r + 0.769 * g + 0.189 * b);
+                    int tg = (int)(0.349 * r + 0.686 * g + 0.168 * b);
+                    int tb = (int)(0.272 * r + 0.534 * g + 0.131 * b);
+                    
+                    tr = Math.min(255, tr);
+                    tg = Math.min(255, tg);
+                    tb = Math.min(255, tb);
+                    
+                    bitmap2.setPixel(x, y, Color.argb(Color.alpha(col), tr, tg, tb));
+                }
+            }
+            updateImageView(bitmap2);
+        } catch (IOException e) {
+            Log.e("Image", "Unable to load image");
+        }
+    }
+
     private void updateImageView(Bitmap bitmap) {
             i.setImageBitmap(bitmap);
     }
