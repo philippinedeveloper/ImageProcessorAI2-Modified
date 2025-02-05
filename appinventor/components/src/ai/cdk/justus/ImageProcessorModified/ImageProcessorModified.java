@@ -22,7 +22,7 @@ import com.google.appinventor.components.runtime.*;
 import android.widget.ImageView;
 
 @DesignerComponent(versionName = ImageProcessorModified.VERSION_NAME,
-    version = 3,
+    version = 4,
     description = "A component for complex image processing in MIT App Inventor.",
     category = ComponentCategory.EXTENSION,
     nonVisible = true,
@@ -30,7 +30,7 @@ import android.widget.ImageView;
 @SimpleObject(external = true)
 public class ImageProcessorModified extends AndroidNonvisibleComponent implements Component {
 
-    public static final String VERSION_NAME = "1.2";
+    public static final String VERSION_NAME = "1.3";
     public static final float DEFAULT_WEIGHT = 0.5f;
     private ComponentContainer container;
     private float weight = DEFAULT_WEIGHT;
